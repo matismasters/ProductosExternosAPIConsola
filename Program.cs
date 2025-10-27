@@ -8,57 +8,21 @@
 ]
 */
 
+using ProductosExternosAPIConsola;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-
-// Creamos un Dto para mapear los productos, es necesario para serializar y deserializar
-// La respuesta JSON
-public class ProductoDto
-{
-    [JsonPropertyName("id")]
-    public string? Id { get; set; }
-
-    [JsonPropertyName("nombre")]
-    public string? NombreProducto { get; set; }
-
-    [JsonPropertyName("precio")]
-    public string? Precio { get; set; }
-
-    [JsonPropertyName("createdAt")]
-    public string? CreatedAt { get; set; }
-}
 
 public class Program
 {
     public static async Task Main(string[] args)
     {
-        // URL de la API REST externa
-        string apiUrl = "https://68ffe1e9e02b16d1753f8cfe.mockapi.io/api/v1/productos";
-
-        using HttpClient httpClient = new HttpClient();
-        HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
-
-        if (response.IsSuccessStatusCode)
-        {
-            string json = await response.Content.ReadAsStringAsync();
-            List<ProductoDto>? productos = JsonSerializer.Deserialize<List<ProductoDto>>(json);
-            Console.WriteLine($"Lista de Productos {productos!.Count}:");
-
-            // Listar los productos
-            foreach (ProductoDto producto in productos)
-            {
-                Console.WriteLine($"ID: {producto.Id}");
-                Console.WriteLine($"NombreProducto: {producto.NombreProducto}");
-                Console.WriteLine($"Precio: {producto.Precio}");
-                Console.WriteLine($"Fecha de Creación: {producto.CreatedAt}");
-                Console.WriteLine();
-            }
-        }
-        else
-        {
-            Console.WriteLine($"Error al obtener los productos: {response.StatusCode}");
-        }
+        IServicioProductos servicioProductos = new ServicioProductos();
+        //await servicioProductos.CrearProducto();
+        //await servicioProductos.ListarProductos();
+        //await servicioProductos.BuscarMostrar("1");
     }
 }
