@@ -12,11 +12,11 @@ namespace ProductosExternosAPIConsola
     public interface IServicioProductos
     {
         Task ListarProductos();
-        Task CrearProducto();
+        Task CrearProducto(string nombre, string precio);
         Task BuscarMostrar(string id);
         Task<ProductoDto> Buscar(string id);
         Task Borrar(string id);
-        Task Modificar(string id, ProductoDto productoDto);
+        Task Modificar(ProductoDto productoDto);
     }
 
     // Creamos un Dto para mapear los productos, es necesario para serializar y deserializar
@@ -62,14 +62,14 @@ namespace ProductosExternosAPIConsola
             }
         }
 
-        public async Task Modificar(string id, ProductoDto productoDto)
+        public async Task Modificar(ProductoDto productoDto)
         {
             string json = JsonSerializer.Serialize(productoDto);
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PutAsync($"{_apiUrl}/{id}", content);
+            HttpResponseMessage response = await _httpClient.PutAsync($"{_apiUrl}/{productoDto.Id}", content);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine($"Producto con ID {id} modificado correctamente.");
+                Console.WriteLine($"Producto con ID {productoDto.Id} modificado correctamente.");
             }
             else
             {
@@ -108,12 +108,12 @@ namespace ProductosExternosAPIConsola
                 Console.WriteLine($"Error al buscar el producto: {response.StatusCode}");
             }
         }
-        public async Task CrearProducto()
+        public async Task CrearProducto(string nombre, string precio)
         {
             ProductoDto nuevoProducto = new ProductoDto
             {
-                NombreProducto = "Producto Matis",
-                Precio = "99.99",
+                NombreProducto = nombre,
+                Precio = precio,
                 CreatedAt = DateTime.UtcNow.ToString("o")
             };
 

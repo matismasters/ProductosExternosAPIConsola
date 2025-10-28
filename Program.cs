@@ -24,5 +24,14 @@ public class Program
         //await servicioProductos.CrearProducto();
         //await servicioProductos.ListarProductos();
         //await servicioProductos.BuscarMostrar("1");
+        ProductoDto producto = await servicioProductos.Buscar("1");
+        Console.WriteLine($"Producto encontrado: {producto.NombreProducto} - Precio: {producto.Precio}");
+
+        producto.Precio = "XXXXXXXXXXXXXX";
+        await servicioProductos.Modificar(producto);    
+        Console.WriteLine("Modificación completada.");
+
+        producto = await servicioProductos.Buscar("1");
+        Console.WriteLine($"Producto encontrado: {producto.NombreProducto} - Precio: {producto.Precio}");
     }
 }
